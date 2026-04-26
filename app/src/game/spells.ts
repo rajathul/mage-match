@@ -1,27 +1,27 @@
 import type { Spell, Tier } from "./types";
 
 const EASY: Omit<Spell, "tier">[] = [
-  { name: "Slippery Shelf Shift", phonetic: "SLIP-er-ee SHELF SHIFT", damage: 20, backfireChance: 0, threshold: 85, flavor: "A glassy nudge of force." },
-  { name: "Flick Frock Flicker", phonetic: "FLIK FROK FLIK-er", damage: 18, backfireChance: 0, threshold: 85, flavor: "Tiny embers dance once." },
-  { name: "Brisk Brick Bracket", phonetic: "BRISK BRIK BRAK-et", damage: 22, backfireChance: 5, threshold: 85, flavor: "A wall of sudden stone." },
-  { name: "Plump Plum Plume", phonetic: "PLUMP PLUM PLOOM", damage: 19, backfireChance: 0, threshold: 85, flavor: "Sweet vapor coils outward." },
-  { name: "Tiny Tin Twin", phonetic: "TY-nee TIN TWIN", damage: 17, backfireChance: 0, threshold: 85, flavor: "Two echoes, one whisper." },
+  { name: "Silly seals sell fresh fish", phonetic: "SIL-ee SEELZ SEL FRESH FISH", damage: 20, backfireChance: 0, threshold: 85, flavor: "The fishmonger smells suspicious." },
+  { name: "Fluffy bunnies flip big flapjacks", phonetic: "FLUF-ee BUN-eez FLIP BIG FLAP-jaks", damage: 20, backfireChance: 0, threshold: 85, flavor: "Breakfast served with a thud." },
+  { name: "Brisk black bugs bite back", phonetic: "BRISK BLAK BUGZ BYT BAK", damage: 20, backfireChance: 0, threshold: 85, flavor: "Never swat what bites first." },
+  { name: "Plump pink pigs pick peppers", phonetic: "PLUMP PINK PIGZ PIK PEP-erz", damage: 20, backfireChance: 0, threshold: 85, flavor: "The garden reeks of bacon." },
+  { name: "Crispy crabs crack crusty crackers", phonetic: "KRIS-pee KRABZ KRAK KRUS-tee KRAK-erz", damage: 20, backfireChance: 0, threshold: 85, flavor: "A beach snack gone wrong." },
 ];
 
 const MEDIUM: Omit<Spell, "tier">[] = [
-  { name: "Crisp Crisscross Crackle", phonetic: "KRISP KRIS-kraws KRAK-ul", damage: 45, backfireChance: 20, threshold: 80, flavor: "Lattices of static lightning." },
-  { name: "Frosted Thrush Throat", phonetic: "FROS-ted THRUSH THROHT", damage: 42, backfireChance: 22, threshold: 80, flavor: "An icy birdcall of force." },
-  { name: "Quick Quill Quibble", phonetic: "KWIK KWIL KWIB-ul", damage: 40, backfireChance: 18, threshold: 80, flavor: "Words sharpened to barbs." },
-  { name: "Plucky Pluto's Plumber", phonetic: "PLUK-ee PLOO-toez PLUM-er", damage: 47, backfireChance: 25, threshold: 80, flavor: "A leak in the cosmic pipe." },
-  { name: "Shrewd Shrub's Shrapnel", phonetic: "SHROOD SHRUBZ SHRAP-nul", damage: 48, backfireChance: 25, threshold: 80, flavor: "Hedgerows hurl their thorns." },
+  { name: "She sells seashells by the seashore", phonetic: "SHEE SELZ SEE-shelz BY thuh SEE-shor", damage: 45, backfireChance: 20, threshold: 80, flavor: "The ocean owes her money." },
+  { name: "Thick thistle sticks stick thickly", phonetic: "THIK THIS-ul STIKS STIK THIK-lee", damage: 45, backfireChance: 20, threshold: 80, flavor: "The hedge hates you personally." },
+  { name: "Six slippery snails slid slowly seaward", phonetic: "SIKS SLIP-er-ee SNAYLZ SLID SLOH-lee SEE-werd", damage: 45, backfireChance: 20, threshold: 80, flavor: "A sluggish oceanic commute." },
+  { name: "Freshly fried flying fish flesh", phonetic: "FRESH-lee FRYD FLY-ing FISH FLESH", damage: 45, backfireChance: 20, threshold: 80, flavor: "The chef regrets everything." },
+  { name: "Which witch switched the witch's britches", phonetic: "WICH WICH SWICHT thuh WICHIZ BRICH-iz", damage: 47, backfireChance: 25, threshold: 80, flavor: "A laundry dispute of dark power." },
 ];
 
 const HARD: Omit<Spell, "tier">[] = [
-  { name: "Sixth Sheep's Sheath Shriek", phonetic: "SIKSTH SHEEPS SHEETH SHREEK", damage: 80, backfireChance: 50, threshold: 75, flavor: "A scream from beneath the wool." },
-  { name: "Three Thrashed Thrushes Thrum", phonetic: "THREE THRASHT THRUSH-iz THRUM", damage: 78, backfireChance: 50, threshold: 75, flavor: "A drumbeat of fragile wings." },
-  { name: "Rural Brewery's Wristwatch", phonetic: "ROOR-ul BROO-er-eez RIST-wach", damage: 82, backfireChance: 55, threshold: 75, flavor: "Time itself ferments." },
-  { name: "Sixth Sick Sheikh's Sixth Sheep", phonetic: "SIKSTH SIK SHAYKS SIKSTH SHEEP", damage: 85, backfireChance: 60, threshold: 72, flavor: "A flock of hexed dreams." },
-  { name: "Strict Strangler's Strudel", phonetic: "STRIKT STRANG-glerz STROO-dul", damage: 80, backfireChance: 50, threshold: 75, flavor: "Pastry knotted with malice." },
+  { name: "The sixth sick sheikh's sixth sheep is sick", phonetic: "thuh SIKSTH SIK SHAYKS SIKSTH SHEEP IZ SIK", damage: 80, backfireChance: 50, threshold: 75, flavor: "A veterinary nightmare of legendary scope." },
+  { name: "Truly rural lurkers rarely lure rural lurkers", phonetic: "TROO-lee ROOR-ul LER-kerz RAIR-lee LYOOR ROOR-ul LER-kerz", damage: 82, backfireChance: 55, threshold: 75, flavor: "Country paranoia at its finest." },
+  { name: "Three free throws threw throngs through", phonetic: "THREE FREE THROHZ THREW THRONGZ THROO", damage: 80, backfireChance: 50, threshold: 75, flavor: "Basketball magic gone catastrophically wrong." },
+  { name: "Specific pacific traffic statistics perplex", phonetic: "speh-SIF-ik peh-SIF-ik TRAF-ik steh-TIS-tiks per-PLEKS", damage: 85, backfireChance: 60, threshold: 72, flavor: "The data refuses to cooperate." },
+  { name: "Shrewd shrewd shrews shred fresh shredded cheese", phonetic: "SHROOD SHROOD SHROOZ SHRED FRESH SHRED-id CHEEZ", damage: 80, backfireChance: 50, threshold: 75, flavor: "A suspicious amount of dairy damage." },
 ];
 
 function pick<T>(arr: T[]): T {

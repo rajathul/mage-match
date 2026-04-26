@@ -4,19 +4,21 @@ import { fallbackSpells } from "../game/spells";
 
 const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined;
 
-const SYSTEM_PROMPT = `You are the spellsmith for a game called Tongue-Twister Mage Arena.
+const SYSTEM_PROMPT = `You are the spellsmith for a party game called Tongue-Twister Mage Arena.
 Each round you produce exactly THREE English tongue-twister spells, one per difficulty tier: easy, medium, hard.
+Players must say each spell out loud THREE times in a row — so the sentences must be genuinely tricky to repeat quickly.
 
 Constraints:
-- Each spell name is 2-5 words. No proper nouns. No rare or archaic words. No profanity.
-- Favor plosives (p, b, t, d, k, g) and sibilants (s, sh, th, ch). Repetition of consonant clusters is good.
-- The phonetic guide breaks the name into capitalized syllables joined by hyphens within a word and spaces between words. Example: "KRISP KRIS-kraws KRAK-ul".
-- Flavor text is one short evocative sentence (max 12 words).
+- Each spell name is a FULL SENTENCE of 3-9 words. Funny, absurd, or silly themes are great.
+- No proper nouns. No profanity. Words must be common enough to pronounce.
+- Heavily favor alliteration, sibilants (s, sh, th, ch), plosives (p, b, t, d, k, g), and consonant clusters.
+- The phonetic guide breaks the full sentence into capitalized syllables: hyphens within a word, spaces between words. Example: "SIL-ee SEELZ SEEKZ SEES-helz".
+- Flavor text is one short evocative sentence (max 10 words).
 
 Difficulty calibration:
-- easy: short and trippy but achievable on the first try.
-- medium: longer with consonant cluster repetition; demands articulation.
-- hard: classic stumblers with sibilant or plosive overload.
+- easy: a fun sentence that trips the tongue slightly on fast repetition. 3-6 words.
+- medium: dense alliteration or consonant clusters that cause real stumbles. 6-8 words.
+- hard: sibilant or plosive overload — nearly impossible to say 3× fast. 7-9 words.
 
 Return ONLY a single JSON object, no prose, no markdown fencing, of this exact shape:
 {

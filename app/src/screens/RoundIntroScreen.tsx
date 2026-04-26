@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import type { Player, Spell } from "../game/types";
-import { speakSequence, cancelSpeech } from "../audio/tts";
 
 export function RoundIntroScreen({
   round,
@@ -23,18 +22,13 @@ export function RoundIntroScreen({
     fired.current = true;
 
     let cancelled = false;
-    (async () => {
-      await new Promise((r) => setTimeout(r, 700));
-      if (cancelled) return;
-      await speakSequence(spells.map((s) => s.name), 250);
-      if (cancelled) return;
-      await new Promise((r) => setTimeout(r, 400));
+    const timer = window.setTimeout(() => {
       if (!cancelled) onDone();
-    })();
+    }, 800);
 
     return () => {
       cancelled = true;
-      cancelSpeech();
+      window.clearTimeout(timer);
     };
   }, [generating, spells, onDone]);
 
@@ -61,19 +55,7 @@ export function RoundIntroScreen({
           <p className="font-mono text-sm text-arcane-muted">conjuring spells...</p>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-2">
-          <p className="font-mono text-sm text-arcane-muted">listen to the incantations</p>
-          <div className="flex gap-2 mt-2">
-            {spells.map((s) => (
-              <span
-                key={s.name}
-                className="px-3 py-1 rounded-full text-xs font-mono border border-arcane-border bg-arcane-panel/60"
-              >
-                {s.name}
-              </span>
-            ))}
-          </div>
-        </div>
+        <p className="font-mono text-sm text-arcane-muted">get ready…</p>
       )}
     </div>
   );

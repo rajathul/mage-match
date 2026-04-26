@@ -40,12 +40,33 @@ export type Score = {
   phoneticPct: number;
 };
 
+function scoreWord(tw: string, uw: string): number {
+  if (!uw) return 0;
+  const textSim = ratio(tw, uw);
+  const phonSim = ratio(phoneticKey(tw), phoneticKey(uw));
+  const combined = 0.6 * textSim + 0.4 * phonSim;
+  // wrong word = zero; no carrying correct words to cover mistakes
+  return combined < 0.55 ? 0 : combined;
+}
+
 export function scoreUtterance(target: string, transcript: string): Score {
   const t = normalize(target);
   const u = normalize(transcript);
+
+  const tWords = t.split(" ").filter(Boolean);
+  const uWords = u.split(" ").filter(Boolean);
+
+  if (tWords.length === 0) return { total: 100, textPct: 100, phoneticPct: 100 };
+  if (uWords.length === 0) return { total: 0, textPct: 0, phoneticPct: 0 };
+
+  let wordTotal = 0;
+  for (let i = 0; i < tWords.length; i++) {
+    wordTotal += scoreWord(tWords[i], uWords[i] ?? "");
+  }
+  const total = (wordTotal / tWords.length) * 100;
+
   const textPct = ratio(t, u) * 100;
   const phoneticPct = ratio(phoneticKey(t), phoneticKey(u)) * 100;
-  const total = 0.6 * textPct + 0.4 * phoneticPct;
   return { total, textPct, phoneticPct };
 }
 
@@ -53,8 +74,10 @@ export function resolveCast(
   spell: Spell,
   transcript: string,
   caster: 0 | 1,
+  reps = 1,
 ): Outcome {
-  const { total } = scoreUtterance(spell.name, transcript);
+  const target = reps > 1 ? Array(reps).fill(spell.name).join(" ") : spell.name;
+  const { total } = scoreUtterance(target, transcript);
   const score = Math.round(total);
 
   if (score >= spell.threshold) {

@@ -52,10 +52,17 @@ export function ResolutionScreen({
             <span className="mx-2">·</span>
             threshold: {outcome.spell.threshold}%
           </p>
-          <p className="text-arcane-muted italic mt-2">
-            {outcome.transcript ? <>You said: <span className="text-arcane-text not-italic">"{outcome.transcript}"</span></> : "Whisper heard nothing."}
-          </p>
-          <p className="mt-4 text-balance">{damageLine}.</p>
+
+          <div className="mt-3 px-5 py-3 rounded-xl bg-arcane-panel border border-arcane-border">
+            <p className="font-mono text-xs tracking-[0.3em] text-arcane-muted mb-1">YOU SAID</p>
+            {outcome.transcript ? (
+              <p className="font-mono text-xl text-amber-300 break-words">"{outcome.transcript}"</p>
+            ) : (
+              <p className="font-mono text-base text-arcane-muted italic">— silence —</p>
+            )}
+          </div>
+
+          <p className="mt-3 text-balance">{damageLine}.</p>
         </div>
       </div>
 

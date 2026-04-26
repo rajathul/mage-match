@@ -43,4 +43,5 @@ export type GameState = {
 };
 
 export const MAX_HP = 100;
-export const CAST_TIME_LIMIT_MS = 8000;
+export const CAST_TIME_LIMIT_MS = 12000;
+export const CAST_REPEATS = 3;

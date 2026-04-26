@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { Spell } from "../game/types";
-import { CAST_TIME_LIMIT_MS } from "../game/types";
+import type { Spell, Outcome } from "../game/types";
+import { CAST_TIME_LIMIT_MS, CAST_REPEATS } from "../game/types";
 import { Timer } from "../components/Timer";
-import { startRecorder, type RecorderHandle } from "../audio/recorder";
-import { transcribe } from "../api/transcribe";
+import { startBrowserSR, type BrowserSRHandle } from "../audio/browserSR";
 import { resolveCast } from "../game/scoring";
-import type { Outcome } from "../game/types";
 
 type Phase = "starting" | "recording" | "processing" | "error";
 
@@ -22,7 +20,8 @@ export function CastingScreen({
   const [phase, setPhase] = useState<Phase>("starting");
   const [error, setError] = useState<string | null>(null);
   const [remaining, setRemaining] = useState(CAST_TIME_LIMIT_MS);
-  const recRef = useRef<RecorderHandle | null>(null);
+  const [liveTranscript, setLiveTranscript] = useState("");
+  const srRef = useRef<BrowserSRHandle | null>(null);
   const tickRef = useRef<number | null>(null);
   const settled = useRef(false);
 
@@ -30,12 +29,12 @@ export function CastingScreen({
     let cancelled = false;
     (async () => {
       try {
-        const handle = await startRecorder();
+        const handle = await startBrowserSR((text) => setLiveTranscript(text));
         if (cancelled) {
           handle.cancel();
           return;
         }
-        recRef.current = handle;
+        srRef.current = handle;
         setPhase("recording");
         const start = performance.now();
         tickRef.current = window.setInterval(() => {
@@ -56,7 +55,7 @@ export function CastingScreen({
     return () => {
       cancelled = true;
       if (tickRef.current) window.clearInterval(tickRef.current);
-      recRef.current?.cancel();
+      srRef.current?.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -67,14 +66,11 @@ export function CastingScreen({
     if (tickRef.current) window.clearInterval(tickRef.current);
     setPhase("processing");
     try {
-      const blob = await recRef.current!.stop();
-      const transcript = await transcribe(blob);
-      const outcome = resolveCast(spell, transcript, caster);
-      onResolved(outcome);
+      const transcript = await srRef.current!.stop();
+      onResolved(resolveCast(spell, transcript, caster, CAST_REPEATS));
     } catch (e) {
       console.error(e);
-      const outcome = resolveCast(spell, "", caster);
-      onResolved(outcome);
+      onResolved(resolveCast(spell, "", caster));
     }
   }
 
@@ -99,12 +95,25 @@ export function CastingScreen({
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-8 px-6">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
-        <p className="font-mono text-xs tracking-[0.4em] text-arcane-muted mb-2">SPEAK THE SPELL</p>
-        <h2 className="font-display text-4xl text-balance">{spell.name}</h2>
-        <code className="font-mono text-lg text-arcane-muted block mt-3">{spell.phonetic}</code>
+        <p className="font-mono text-xs tracking-[0.4em] text-arcane-muted mb-2">
+          SPEAK THE SPELL — <span className="text-amber-300">×{CAST_REPEATS}</span>
+        </p>
+        <h2 className={`font-display text-balance ${spell.name.length > 28 ? "text-2xl" : "text-4xl"}`}>
+          {spell.name}
+        </h2>
+        <code className="font-mono text-sm text-arcane-muted block mt-3">{spell.phonetic}</code>
       </motion.div>
 
       <Timer remainingMs={remaining} totalMs={CAST_TIME_LIMIT_MS} />
+
+      <div className="w-full max-w-md min-h-[4.5rem] px-5 py-3 rounded-xl bg-arcane-panel border border-arcane-border flex flex-col items-center justify-center">
+        <p className="font-mono text-xs tracking-[0.3em] text-arcane-muted mb-1">HEARING</p>
+        {liveTranscript ? (
+          <p className="font-mono text-lg text-amber-300 text-center leading-snug">{liveTranscript}</p>
+        ) : (
+          <p className="font-mono text-sm text-arcane-muted/40 italic">speak the incantation…</p>
+        )}
+      </div>
 
       <div className="flex flex-col items-center gap-4">
         {phase === "recording" && (
@@ -117,7 +126,7 @@ export function CastingScreen({
           </motion.div>
         )}
         {phase === "processing" && (
-          <p className="font-mono text-sm text-arcane-muted">transcribing your incantation...</p>
+          <p className="font-mono text-sm text-arcane-muted">finalising your incantation…</p>
         )}
         {phase === "recording" && (
           <button
